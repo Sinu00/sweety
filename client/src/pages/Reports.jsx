@@ -44,8 +44,10 @@ export default function Reports() {
           api(`/reports/month-to-date?date=${date}`),
           api(`/reports/monthly?date=${date}`),
         ]);
+        const [y, m] = date.split('-').map(Number);
+        const lastDay = String(new Date(y, m, 0).getDate()).padStart(2, '0');
         const month = date.slice(0, 7);
-        const { data: monthReadings } = await api(`/readings?from=${month}-01&to=${month}-31`);
+        const { data: monthReadings } = await api(`/readings?from=${month}-01&to=${month}-${lastDay}`);
         if (cancelled) return;
         setDaily(d);
         setMtd(m);

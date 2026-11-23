@@ -84,7 +84,7 @@ router.put('/:id', async (req, res) => {
   );
   if (!existing[0]) return res.status(404).json({ error: 'Reading not found.' });
   const current = existing[0];
-  const currentDate = current.date.toISOString().slice(0, 10);
+  const currentDate = String(current.date).slice(0, 10); // DATE comes back as 'YYYY-MM-DD'
 
   const date = req.body.date !== undefined ? req.body.date : currentDate;
   const slot = req.body.slot !== undefined ? req.body.slot : current.slot;
