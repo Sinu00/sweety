@@ -24,7 +24,9 @@ function validateReading({ date, slot, value }, existingSlots, today) {
     return { error: 'Please choose a time slot.' };
   }
   if (existingSlots.includes(slot)) {
-    return { error: `You already have an ${SLOT_LABELS[slot]} reading for this date.` };
+    const label = SLOT_LABELS[slot];
+    const article = /^[aeiou]/i.test(label) ? 'an' : 'a';
+    return { error: `You already have ${article} ${label} reading for this date.` };
   }
   if (existingSlots.length >= 4) {
     return { error: 'You can add only 4 readings per day.' };
