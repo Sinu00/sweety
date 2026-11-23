@@ -1,0 +1,12 @@
+{
+  "name": "sweety",
+  "version": "1.0.0",
+  "private": true,
+  "description": "Sweety - a blood glucose tracker (Kenpath take-home assignment)",
+  "scripts": {
+    "server": "npm --prefix server run dev",
+    "client": "npm --prefix client run dev",
+    "seed": "npm --prefix server run seed",
+    "test": "npm --prefix server test"
+  }
+}
