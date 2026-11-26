@@ -1,6 +1,7 @@
 const express = require('express');
 const db = require('../db');
 const { requireAuth } = require('../middleware/auth');
+const { LOW_BELOW, HIGH_ABOVE } = require('../glucose');
 
 const router = express.Router();
 router.use(requireAuth);
@@ -19,9 +20,11 @@ function parseDateParam(req, res) {
 async function statsFor(userId, from, to) {
   const { rows } = await db.query(
     `SELECT MAX(value) AS highest, MIN(value) AS lowest,
-            ROUND(AVG(value)::numeric, 1) AS average, COUNT(*)::int AS count
+            ROUND(AVG(value)::numeric, 1) AS average, COUNT(*)::int AS count,
+            COUNT(*) FILTER (WHERE value < $4)::int AS low,
+            COUNT(*) FILTER (WHERE value > $5)::int AS high
      FROM readings WHERE user_id = $1 AND date BETWEEN $2 AND $3`,
-    [userId, from, to]
+    [userId, from, to, LOW_BELOW, HIGH_ABOVE]
   );
   const row = rows[0];
   return {
@@ -30,6 +33,8 @@ async function statsFor(userId, from, to) {
     lowest: row.lowest,
     average: row.average === null ? null : Number(row.average),
     count: row.count,
+    // Extra (beyond the brief): how many readings were low / in range / high.
+    ranges: { low: row.low, in_range: row.count - row.low - row.high, high: row.high },
   };
 }
 

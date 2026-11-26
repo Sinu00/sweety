@@ -2,6 +2,8 @@ const express = require('express');
 const db = require('../db');
 const { requireAuth } = require('../middleware/auth');
 const { validateReading, todayString } = require('../validate');
+const { SLOT_LABELS } = require('../constants');
+const { classify } = require('../glucose');
 
 const router = express.Router();
 router.use(requireAuth);
@@ -56,6 +58,27 @@ router.get('/', async (req, res) => {
   res.json({ data: rows });
 });
 
+// Non-numeric ids can never match a reading; answer 404 instead of a database error.
+router.param('id', (req, res, next, id) => {
+  if (!/^\d+$/.test(id)) return res.status(404).json({ error: 'Reading not found.' });
+  next();
+});
+
+// GET /api/readings/export  -> CSV of all the user's readings (e.g. to share with a doctor)
+router.get('/export', async (req, res) => {
+  const { rows } = await db.query(
+    `SELECT date, slot, value FROM readings WHERE user_id = $1
+     ORDER BY date, CASE slot WHEN 'morning_fasting' THEN 1 WHEN 'after_breakfast' THEN 2
+                             WHEN 'after_lunch' THEN 3 ELSE 4 END`,
+    [req.userId]
+  );
+  const lines = ['date,slot,value_mg_dl,range'];
+  rows.forEach((r) => lines.push(`${r.date},${SLOT_LABELS[r.slot]},${r.value},${classify(r.value)}`));
+  res.set('Content-Type', 'text/csv; charset=utf-8');
+  res.set('Content-Disposition', 'attachment; filename="sweety-readings.csv"');
+  res.send(`${lines.join('\n')}\n`);
+});
+
 // POST /api/readings { date, slot, value }
 router.post('/', async (req, res) => {
   const { date, slot, value } = req.body || {};
@@ -86,9 +109,10 @@ router.put('/:id', async (req, res) => {
   const current = existing[0];
   const currentDate = String(current.date).slice(0, 10); // DATE comes back as 'YYYY-MM-DD'
 
-  const date = req.body.date !== undefined ? req.body.date : currentDate;
-  const slot = req.body.slot !== undefined ? req.body.slot : current.slot;
-  const value = req.body.value !== undefined ? req.body.value : current.value;
+  const body = req.body || {};
+  const date = body.date !== undefined ? body.date : currentDate;
+  const slot = body.slot !== undefined ? body.slot : current.slot;
+  const value = body.value !== undefined ? body.value : current.value;
 
   const taken = date ? await slotsTaken(req.userId, date, current.id) : [];
   const { error, reading } = validateReading({ date, slot, value }, taken, todayString());
