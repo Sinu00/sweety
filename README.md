@@ -239,3 +239,5 @@ iPhone-size captures (390×844 @2x) from the seeded demo account. Files are in
 - A daily reminder job (BullMQ) for users with fewer than 4 readings.
 - End-to-end tests (Playwright) for the main flows, and installable PWA
   support so it can live on the home screen.
+
+All rights reserved. Hiring evaluation only. See [LICENSE](LICENSE).
