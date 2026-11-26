@@ -185,10 +185,31 @@ sweety/
 
 ## Screenshots
 
-All in `screenshots/` (iPhone-size, 390×844 @2x):
-login, today, insights, add reading, validation error, daily report, previous
-month report, month chart, history, plus dark-mode versions of today and
-reports.
+iPhone-size captures (390×844 @2x) from the seeded demo account. Files are in
+`screenshots/`.
+
+<table>
+  <tr>
+    <td align="center"><img src="screenshots/01-login.png" width="220" alt="Login screen" /><br /><sub>Login</sub></td>
+    <td align="center"><img src="screenshots/02-today.png" width="220" alt="Today screen with day ring and slots" /><br /><sub>Today</sub></td>
+    <td align="center"><img src="screenshots/03-insights.png" width="220" alt="14-day insights" /><br /><sub>14-day insights</sub></td>
+  </tr>
+  <tr>
+    <td align="center"><img src="screenshots/04-add-reading.png" width="220" alt="Add reading sheet" /><br /><sub>Add a reading</sub></td>
+    <td align="center"><img src="screenshots/05-validation-error.png" width="220" alt="Duplicate slot validation error" /><br /><sub>Validation error</sub></td>
+    <td align="center"><img src="screenshots/06-reports.png" width="220" alt="Daily report" /><br /><sub>Daily report</sub></td>
+  </tr>
+  <tr>
+    <td align="center"><img src="screenshots/07-reports-last-month.png" width="220" alt="Previous month report" /><br /><sub>Previous month report</sub></td>
+    <td align="center"><img src="screenshots/08-chart.png" width="220" alt="Month chart with target band" /><br /><sub>Month chart</sub></td>
+    <td align="center"><img src="screenshots/09-history.png" width="220" alt="History grouped by day" /><br /><sub>History</sub></td>
+  </tr>
+  <tr>
+    <td align="center"><img src="screenshots/dark-02-today.png" width="220" alt="Today screen, dark mode" /><br /><sub>Today (dark)</sub></td>
+    <td align="center"><img src="screenshots/dark-06-reports.png" width="220" alt="Daily report, dark mode" /><br /><sub>Daily report (dark)</sub></td>
+    <td></td>
+  </tr>
+</table>
 
 ## Notes
 
