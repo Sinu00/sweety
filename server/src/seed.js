@@ -46,7 +46,11 @@ async function main() {
       // Skip some readings so days have 2-4 entries and look real.
       if (rng() < 0.25) continue;
       const spread = slot === 'morning_fasting' ? 20 : 45;
-      const value = Math.round(baselines[slot] + (rng() - 0.5) * 2 * spread);
+      let value = Math.round(baselines[slot] + (rng() - 0.5) * 2 * spread);
+      // Occasional post-meal spikes and fasting lows so every range shows up.
+      const roll = rng();
+      if (slot !== 'morning_fasting' && roll < 0.08) value += 50 + Math.round(rng() * 60);
+      if (slot === 'morning_fasting' && roll < 0.06) value = 58 + Math.round(rng() * 10);
       const clamped = Math.min(600, Math.max(40, value));
       await db.query(
         'INSERT INTO readings (user_id, date, slot, value) VALUES ($1, $2, $3, $4)',
