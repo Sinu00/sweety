@@ -95,6 +95,10 @@ cd server
 DATABASE_URL=postgres://postgres:postgres@localhost:5432/sweety_test npm test
 ```
 
+The test run applies the schema to the test database automatically (Jest
+`globalSetup`) and truncates its tables, so always point it at a throwaway
+database, never your real one.
+
 Client tests (Vitest + React Testing Library - the reading form):
 
 ```bash
